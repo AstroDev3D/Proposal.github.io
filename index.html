@@ -21,6 +21,7 @@
             padding: 0;
             height: 100vh;
             width: 100vw;
+            cursor: pointer; /* Suggests clickability */
         }
         
         .title-font {
@@ -49,6 +50,27 @@
             }
             100% {
                 transform: translateY(-20vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Click Interaction Heart */
+        .click-heart {
+            position: absolute;
+            pointer-events: none;
+            z-index: 9999;
+            animation: click-float-fade 0.8s ease-out forwards;
+            font-size: 1.5rem;
+            user-select: none;
+        }
+
+        @keyframes click-float-fade {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -150%) scale(1.2) rotate(15deg);
                 opacity: 0;
             }
         }
@@ -254,6 +276,27 @@
         }
         setInterval(createFloatingHeart, 500);
 
+        // --- CLICK ANIMATION (NEW) ---
+        // Adds a popping heart effect wherever the user clicks
+        document.addEventListener('click', (e) => {
+            const heart = document.createElement('div');
+            heart.classList.add('click-heart');
+            // Random heart emoji
+            heart.innerHTML = ['❤️', '💖', '💕', '💗', '💝'][Math.floor(Math.random() * 5)];
+            
+            // Position at mouse/touch coordinates
+            heart.style.left = `${e.clientX}px`;
+            heart.style.top = `${e.clientY}px`;
+            
+            // Add to body
+            document.body.appendChild(heart);
+            
+            // Clean up after animation ends
+            setTimeout(() => {
+                heart.remove();
+            }, 800); // Matches the 0.8s animation duration
+        });
+
         // --- PAGE NAVIGATION ---
         function goToPage(pageNumber) {
             const current = document.querySelector('.page.active');
@@ -433,5 +476,3 @@
     </script>
 </body>
 </html>
-
-
